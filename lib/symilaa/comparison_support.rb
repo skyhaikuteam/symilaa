@@ -155,5 +155,17 @@ module Symilaa
         fail "Some of the screenshots did not match"
       end
     end
+
+    def self.symilaa_size *images 
+      x = images.first.columns
+      y = images.first.rows
+      images.each do |image|
+        x = [x, image.columns].min 
+        y = [y, image.rows].min
+      end
+      return { width: x, height: y }      
+    end
+
+
   end
 end

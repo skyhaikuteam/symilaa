@@ -18,10 +18,17 @@ module Symilaa
     def similar_to? other
       this_one = Magick::Image.read(@path).first
       that_one = Magick::Image.read(other.path).first
+      
+      size = Symilaa::ComparisonSupport.symilaa_size(this_one, that_one)
+      [this_one, that_one].each do |image|
+        image.crop!(0, 0, size[:width], size[:height])
+      end
 
       similiarity_factor = this_one.compare_channel(that_one, Magick::PeakSignalToNoiseRatioMetric)[1]
 
       similiarity_factor >= SIMILARITY_THRESHOLD
-    rescue Magick::ImageMagickError; end
+      rescue Magick::ImageMagickError
+    end
+
   end
 end
